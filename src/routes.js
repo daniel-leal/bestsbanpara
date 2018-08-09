@@ -2,10 +2,12 @@ import { createSwitchNavigator, createStackNavigator, createDrawerNavigator } fr
 
 import SignIn from './pages/signIn';
 import Main from './pages/main';
+import DadosLiga from './pages/dadosLiga';
 
 const Routes = createStackNavigator({
   SignIn,
-  Main
+  Main,
+  DadosLiga,
 });
 
 export default Routes

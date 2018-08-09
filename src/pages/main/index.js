@@ -26,7 +26,12 @@ export default class Main extends Component {
   renderLeagues = () => (
     this.state.leagues.map(league => {
       return (
-        <ListItem avatar key={league.liga_id} onPress={() => {alert(league.slug)}}>
+        <ListItem 
+          avatar 
+          key={league.liga_id} 
+          onPress={() => {
+            this.props.navigation.push('DadosLiga', { slug: league.slug })}
+          }>
           <Left>
             <Thumbnail source={{ uri: league.url_flamula_png }} />
           </Left>

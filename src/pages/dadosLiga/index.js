@@ -1,42 +1,84 @@
 import React, { Component } from 'react';
 
+import { StyleSheet } from 'react-native';
+
 import { api } from '../../services/api';
 
-import { Container, Header, Content, List, ListItem, Left, Body, Right, Thumbnail, Text, Title } from 'native-base';
+import {
+  Container,
+  Header,
+  Content,
+  List,
+  ListItem,
+  Left,
+  Body,
+  Right,
+  Thumbnail,
+  Text,
+  Title,
+  ScrollView,
+  Button,
+  Icon,
+  Tab,
+  Tabs,
+} from 'native-base';
 
 export default class DadosLiga extends Component {
-  static navigationOptions = {
-    header: null
-  };
+  static navigationOptions = ({ navigation }) => ({
+    header: null,
+  });
 
   state = {
-    leagues: [],
+    teams: [],
+    teamsByRound: [],
+    slug: this.props.navigation.getParam('slug')
   };
 
   async componentDidMount() {
     try {
-      const response = await api.get('/auth/ligas');
-      console.log(response.data);
-      this.setState({ leagues: response.data.ligas });
+      const response = await api.get(`/auth/liga/${this.state.slug}/`);
+      const responseByRound = await api.get(`/auth/liga/${this.state.slug}?orderBy=rodada`);
+      this.setState({ teams: response.data.times, teamsByRound: responseByRound.data.times });
     } catch (_err) {
       console.log(_err);
     }
   }
 
-  renderLeagues = () => (
-    this.state.leagues.map(league => {
+  renderTeams = () => (
+    this.state.teams.map(team => {
       return (
-        <ListItem avatar key={league.liga_id} onPress={() => {alert(league.slug)}}>
+        <ListItem avatar key={team.time_id} style={styles.times}>
           <Left>
-            <Thumbnail source={{ uri: league.url_flamula_png }} />
+            <Thumbnail source={{ uri: team.url_escudo_png }} />
           </Left>
           <Body>
-            <Text>{league.nome}</Text>
-            <Text note>{league.descricao}</Text>
+            <Text>{team.nome}</Text>
+            <Text note>{team.nome_cartola}</Text>
+            <Text style={styles.ponto}>{team.pontos.campeonato.toFixed(2)}</Text>
           </Body>
-          {/* <Right>
-            <Text note>{}</Text>
-          </Right> */}
+          <Right>
+            <Text>{team.ranking.campeonato}</Text>
+          </Right>
+        </ListItem>
+      )
+    })
+  )
+
+  renderTeamsByRound = () => (
+    this.state.teamsByRound.map(team => {
+      return (
+        <ListItem avatar key={team.time_id} style={styles.times}>
+          <Left>
+            <Thumbnail source={{ uri: team.url_escudo_png }} />
+          </Left>
+          <Body>
+            <Text>{team.nome}</Text>
+            <Text note>{team.nome_cartola}</Text>
+            <Text style={styles.ponto}>{team.pontos.rodada.toFixed(2)}</Text>
+          </Body>
+          <Right>
+            <Text>{team.ranking.rodada}</Text>
+          </Right>
         </ListItem>
       )
     })
@@ -45,19 +87,45 @@ export default class DadosLiga extends Component {
   render() {
     return (
       <Container>
-        <Header>
-          <Left />
+        <Header hasTabs>
+          <Left>
+            <Button
+              transparent
+              onPress={() => this.props.navigation.pop()}>
+              <Icon name="arrow-back" />
+            </Button>
+          </Left>
           <Body>
-            <Title>Minhas Ligas</Title>
+            <Title>Ranking</Title>
           </Body>
           <Right />
         </Header>
-        <Content>
-          <List>
-            {this.renderLeagues()}
-          </List>
-        </Content>
+        <Tabs>
+          <Tab heading="Campeonato">
+            <Content>
+              <List>
+                {this.renderTeams()}
+              </List>
+            </Content>
+          </Tab>
+          <Tab heading="Rodada">
+            <Content>
+              <List>
+                {this.renderTeamsByRound()}
+              </List>
+            </Content>
+          </Tab>
+        </Tabs>
       </Container>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  times: {
+    padding: 10,
+  },
+  ponto: {
+    color: '#228B22',
+  }
+})
