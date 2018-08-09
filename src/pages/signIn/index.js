@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { StatusBar, AsyncStorage } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 
-import apiAuth from '../../services/api';
+import { apiAuth } from '../../services/api';
 
 import {
   Container,

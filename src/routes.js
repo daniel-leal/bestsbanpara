@@ -1,11 +1,11 @@
-import { createStackNavigator } from 'react-navigation';
+import { createSwitchNavigator, createStackNavigator, createDrawerNavigator } from 'react-navigation';
 
 import SignIn from './pages/signIn';
 import Main from './pages/main';
 
 const Routes = createStackNavigator({
   SignIn,
-  Main,
+  Main
 });
 
-export default Routes;
+export default Routes
