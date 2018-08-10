@@ -16,7 +16,6 @@ import {
   Thumbnail,
   Text,
   Title,
-  ScrollView,
   Button,
   Icon,
   Tab,
@@ -87,28 +86,38 @@ export default class DadosLiga extends Component {
   render() {
     return (
       <Container>
-        <Header hasTabs>
+        <Header style={styles.cabecalho} hasTabs>
           <Left>
             <Button
               transparent
               onPress={() => this.props.navigation.pop()}>
-              <Icon name="arrow-back" />
+              <Icon name="arrow-back" style={{color: '#fff'}} />
             </Button>
           </Left>
           <Body>
-            <Title>Ranking</Title>
+            <Title style={styles.cabecalhoTexto}>Ranking</Title>
           </Body>
           <Right />
         </Header>
-        <Tabs>
-          <Tab heading="Campeonato">
+        <Tabs tabBarUnderlineStyle={{backgroundColor: '#fff'}}>
+          <Tab heading="Campeonato"
+            tabStyle={{backgroundColor: '#e3672a'}} 
+            textStyle={{color: '#fff'}} 
+            activeTabStyle={{backgroundColor: '#e3672a'}} 
+            activeTextStyle={{color: '#fff', fontWeight: 'normal'}}
+            >
             <Content>
               <List>
                 {this.renderTeams()}
               </List>
             </Content>
           </Tab>
-          <Tab heading="Rodada">
+          <Tab heading="Rodada"
+            tabStyle={{backgroundColor: '#e3672a'}} 
+            textStyle={{color: '#fff'}} 
+            activeTabStyle={{backgroundColor: '#e3672a'}} 
+            activeTextStyle={{color: '#fff', 
+              fontWeight: 'normal'}}>
             <Content>
               <List>
                 {this.renderTeamsByRound()}
@@ -127,5 +136,11 @@ const styles = StyleSheet.create({
   },
   ponto: {
     color: '#228B22',
+  },
+  cabecalho: {
+    backgroundColor: '#e3672a',
+  },
+  cabecalhoTexto: {
+    color: '#fff',
   }
 })
